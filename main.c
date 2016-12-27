@@ -11,29 +11,29 @@
 
 int findFlow(int n, int c[n][n], int f[n][n], int anc[n], int que[n], int flow[n])
 {
-    int qCurrent = 0; // Номер первого элемента в очереди
-    int qNumber = 1; // Кол-во элементов в очереди
-    que[0] = 0; // Первая вершина – источник
+    int qCurrent = 0; // Number of the first element in the queue
+    int qNumber = 1; // Number of items in the queue
+    que[0] = 0; // The first peak - source
     
-    anc[n-1] = -1; // У стока пока нет предков
+    anc[n-1] = -1; // There is no flow of ancestors
     
-    memset(flow, 0, sizeof(int) * n); // Обнуляем все потоки
-    flow[0] = INT32_MAX; // У источника не ограничен
+    memset(flow, 0, sizeof(int) * n); //Zeroing all streams
+    flow[0] = INT32_MAX; // The source is not limitedен
     
     int curV; // CurrentVertex
     
-    // Пока не дойдем до конца или не закончатся вершины в очереди
+    // Until we get to the end or not to end the top of queue
     while (anc[n-1] == -1 && qCurrent < qNumber)
     {
-        curV = *(que + qCurrent); // Извлекаем вершину из очереди
+        curV = *(que + qCurrent); // Removing the top of the queue
         for (int i = 0; i < n; ++i)
         {
             if ( ( c[curV][i] - f[curV][i] > 0 ) && ( flow[i] == 0 ) )
             {
-                que[qNumber] = i; // Добавляем в очередь текущую вершину
-                qNumber++; // Инкрементируем кол-во элементов
+                que[qNumber] = i; // Adding to all the current vertex
+                qNumber++; // Increment number of items
                 
-                anc[i] = curV; // Текущая вершина – предок найденной
+                anc[i] = curV; // Current peak - ancestor found
                 if ( c[curV][i] - f[curV][i] < flow[curV] )
                 {
                     flow[i] = c[curV][i];
@@ -48,14 +48,14 @@ int findFlow(int n, int c[n][n], int f[n][n], int anc[n], int que[n], int flow[n
     
     if ( anc[n-1] == -1 )
     {
-        return 0; // Если у стока нет предков, то увеличивающий путь не найден
+        return 0; // If there is no flow of ancestors, the increasing path was not found
     }
     
     curV = n - 1;
     
     while (curV != 0)
     {
-        // Идем от стока к истоку обратно, прибавляя потоки
+        // We go from drain to source back, adding flows
         f[anc[curV]][curV] += flow[n-1];
         curV = anc[curV];
     }
@@ -65,15 +65,15 @@ int findFlow(int n, int c[n][n], int f[n][n], int anc[n], int que[n], int flow[n
 
 int findMaxFlow(int n, int c[n][n])
 {
-    int f[n][n]; // Поток из вершины i в j
+    int f[n][n]; // The flow from the vertex i to j
     memset(f, 0, sizeof(int) * n * n);
     
-    int ancestors[n]; // Массив, содержащий предков вершин
-    int queue[n]; // Очередь вершин
-    int flow[n]; // Потоки
+    int ancestors[n]; // An array that contains the ancestors of vertices
+    int queue[n]; //The queue of vertices
+    int flow[n]; // Streams
     
-    int maxFlow = 0; // Максимальный поток
-    int augPathFlow; // Поток по увеличивающему пути
+    int maxFlow = 0; //Maximum Flow
+    int augPathFlow; // The flow at an increasing way
     
     do
     {
